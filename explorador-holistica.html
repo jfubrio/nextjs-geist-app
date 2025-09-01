@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explorador de Código - Holística</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .calm-bg { background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%); }
+        .calm-glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .calm-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+        .calm-text-gradient { background: linear-gradient(135deg, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .calm-hover-lift { transition: all 0.3s ease; }
+        .calm-hover-lift:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .syntax-highlight { background: #1e293b; color: #e2e8f0; font-family: 'Courier New', monospace; }
+        .json-key { color: #60a5fa; }
+        .json-string { color: #34d399; }
+        .json-number { color: #fbbf24; }
+        .json-boolean { color: #f87171; }
+        .folder-icon::before { content: "📁"; margin-right: 8px; }
+        .file-icon::before { content: "📄"; margin-right: 8px; }
+        .expanded > .folder-icon::before { content: "📂"; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="calm-bg min-h-screen">
+    <!-- Header -->
+    <header class="calm-glass sticky top-0 z-50 border-b border-white/10">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-xl">H</span>
+                    </div>
+                    <h1 class="text-2xl font-bold calm-text-gradient">
+                        Explorador de Código - Holística
+                    </h1>
+                </div>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Inicio</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Cuestionario</a>
+                    <a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Dashboard</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <div class="mb-8">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Explora la estructura completa del proyecto</h2>
+            <p class="text-gray-600 text-lg">Navega por todos los archivos y comprende cómo funciona la aplicación Holística</p>
+        </div>
+
+        <!-- Project Overview -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="calm-card p-6 rounded-2xl border border-white/20 calm-hover-lift">
+                <div class="text-center">
+                    <div class="text-4xl mb-4">⚛️</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Next.js 15 + TypeScript</h3>
+                    <p class="text-gray-600 text-sm">Framework moderno con TypeScript para desarrollo escalable</p>
+                </div>
+            </div>
+            <div class="calm-card p-6 rounded-2xl border border-white/20 calm-hover-lift">
+                <div class="text-center">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">Tailwind CSS + Radix UI</h3>
+                    <p class="text-gray-600 text-sm">Sistema de diseño moderno con componentes accesibles</p>
+                </div>
+            </div>
+            <div class="calm-card p-6 rounded-2xl border border-white/20 calm-hover-lift">
+                <div class="text-center">
+                    <div class="text-4xl mb-4">🌸</div>
+                    <h3 class="font-semibold text-gray-800 mb-2">8+ Modalidades Terapéuticas</h3>
+                    <p class="text-gray-600 text-sm">Algoritmo de recomendaciones personalizadas</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Explorer -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Project Structure -->
+            <div class="calm-card p-6 rounded-2xl border border-white/20">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+                    📁 Estructura del Proyecto
+                </h3>
+                
+                <div class="mb-4">
+                    <input 
+                        type="text" 
+                        id="searchInput"
+                        placeholder="Buscar archivos..." 
+                        class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                </div>
+
+                <div id="fileTree" class="space-y-1 max-h-96 overflow-y-auto">
+                    <!-- File tree will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- File Content Viewer -->
+            <div class="calm-card p-6 rounded-2xl border border-white/20">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 flex items-center">
+                        📄 Contenido del Archivo
+                    </h3>
+                    <button 
+                        id="copyBtn" 
+                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors hidden"
+                    >
+                        Copiar
+                    </button>
+                </div>
+                
+                <div id="fileInfo" class="mb-4 text-sm text-gray-600 hidden">
+                    <span id="fileName"></span> • <span id="fileType"></span> • <span id="fileLines"></span>
+                </div>
+
+                <div id="fileContent" class="syntax-highlight rounded-lg p-4 max-h-96 overflow-auto text-sm">
+                    <div class="text-gray-400 text-center py-8">
+                        Selecciona un archivo para ver su contenido
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Description -->
+        <div class="mt-12 calm-card p-8 rounded-2xl border border-white/20">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Sobre el Proyecto Holística</h3>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-3">🎯 Funcionalidad Principal</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>• Cuestionario holístico de bienestar (emocional, físico, espiritual)</li>
+                        <li>• Algoritmo de diagnóstico personalizado</li>
+                        <li>• Recomendaciones terapéuticas específicas</li>
+                        <li>• Dashboard para terapeutas</li>
+                        <li>• Sistema de sesiones y seguimiento</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-3">🛠️ Tecnologías Utilizadas</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li>• <strong>Frontend:</strong> Next.js 15, React 18, TypeScript</li>
+                        <li>• <strong>Styling:</strong> Tailwind CSS, Radix UI</li>
+                        <li>• <strong>Componentes:</strong> shadcn/ui, Recharts</li>
+                        <li>• <strong>Formularios:</strong> React Hook Form</li>
+                        <li>• <strong>Notificaciones:</strong> Sonner</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl">
+                <h4 class="text-lg font-semibold text-gray-800 mb-3">🌟 Modalidades Terapéuticas Incluidas</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <span>🌸</span>
+                        <span>Aromaterapia</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>🎵</span>
+                        <span>Frecuencias Sonoras</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>🌺</span>
+                        <span>Flores de Bach</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>🧘</span>
+                        <span>Meditación Guiada</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>💡</span>
+                        <span>Terapia LED</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>👆</span>
+                        <span>Acupresión</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>🍵</span>
+                        <span>Infusiones Naturales</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>🔔</span>
+                        <span>Cuencos Tibetanos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Project file structure data
+        const projectStructure = {
+            "holistica-project": {
+                type: "folder",
+                children: {
+                    "src": {
+                        type: "folder",
+                        children: {
+                            "app": {
+                                type: "folder",
+                                children: {
+                                    "page.tsx": {
+                                        type: "file",
+                                        content: `'use client';
+
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Link from 'next/link';
+
+export default function Home() {
+  return (
+    <div className="min-h-screen calm-bg">
+      {/* Header */}
+      <header className="calm-glass sticky top-0 z-50 border-b border-white/10">
+        <div className="container-calm py-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center calm-pulse">
+                <span className="text-white font-bold text-xl">H</span>
+              </div>
+              <h1 className="calm-title text-3xl calm-text-gradient">
+                Holística
+              </h1>
+            </div>
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="/questionnaire" className="calm-nav-link">
+                Cuestionario
+              </Link>
+              <Link href="/dashboard" className="calm-nav-link">
+                Dashboard
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      {/* Hero Section */}
+      <section className="relative overflow-hidden py-20">
+        <div className="container-calm">
+          <div className="text-center space-y-12 calm-fade-in">
+            <div className="space-y-8">
+              <div className="text-8xl mb-8 calm-breathe">🌸</div>
+              <h2 className="calm-title text-6xl md:text-7xl text-gray-800 leading-tight">
+                Diagnóstico Holístico
+                <span className="block calm-text-gradient font-medium mt-2">
+                  Personalizado
+                </span>
+              </h2>
+              <p className="calm-subtitle text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                Una herramienta integral para evaluar el bienestar emocional, físico y espiritual, 
+                generando recomendaciones terapéuticas personalizadas inspiradas en la sabiduría ancestral.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}`
+                                    },
+                                    "layout.tsx": {
+                                        type: "file",
+                                        content: `import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter'
+});
+
+export const metadata: Metadata = {
+  title: 'Holística - Diagnóstico y Terapias Personalizadas',
+  description: 'Plataforma de diagnóstico holístico que evalúa el bienestar emocional, físico y espiritual, generando recomendaciones terapéuticas personalizadas.',
+  keywords: 'holístico, diagnóstico, terapias, bienestar, emocional, físico, espiritual, aromaterapia, frecuencias, flores de bach',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="es" className={inter.variable}>
+      <body className={\`\${inter.className} antialiased bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen\`}>
+        <div className="relative">
+          <div className="relative z-10">
+            {children}
+          </div>
+        </div>
+      </body>
+    </html>
+  );
+}`
+                                    },
+                                    "questionnaire": {
+                                        type: "folder",
+                                        children: {
+                                            "page.tsx": {
+                                                type: "file",
+                                                content: `'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import ProgressIndicator from '@/components/ProgressIndicator';
+
+// Cuestionario holístico para evaluar bienestar emocional, físico y espiritual
+const questionnaireSteps = [
+  {
+    id: 'bienvenida',
+    titulo: 'Bienvenido/a a tu evaluación holística',
+    descripcion: 'Tómate un momento para respirar profundo. Este cuestionario te ayudará a identificar áreas de bienestar que podemos mejorar juntos.',
+    preguntas: []
+  },
+  {
+    id: 'emocional',
+    titulo: 'Bienestar Emocional',
+    descripcion: 'Vamos a explorar cómo te sientes emocionalmente',
+    preguntas: [
+      {
+        id: 'animo',
+        texto: '¿Cómo te sientes hoy emocionalmente?',
+        tipo: 'escala',
+        min: 1,
+        max: 10,
+        emojis: ['😢', '😔', '😐', '🙂', '😊', '😄']
+      }
+    ]
+  }
+];
+
+export default function QuestionnairePage() {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [responses, setResponses] = useState({});
+
+  return (
+    <div className="min-h-screen calm-gradient-soft">
+      <div className="container mx-auto py-12">
+        <Card className="max-w-3xl mx-auto">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl text-gray-800">
+              {questionnaireSteps[currentStep].titulo}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 text-center mb-8">
+              {questionnaireSteps[currentStep].descripcion}
+            </p>
+            {/* Aquí irían las preguntas del cuestionario */}
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}`
+                                            }
+                                        }
+                                    },
+                                    "dashboard": {
+                                        type: "folder",
+                                        children: {
+                                            "page.tsx": {
+                                                type: "file",
+                                                content: `'use client';
+
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+export default function DashboardPage() {
+  return (
+    <div className="min-h-screen calm-bg">
+      <div className="container mx-auto px-6 py-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+            Dashboard Terapeuta
+          </h1>
+          <p className="text-gray-600">
+            Gestiona las sesiones y revisa las recomendaciones terapéuticas
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Sesiones Activas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-blue-600">24</div>
+              <p className="text-gray-600 text-sm">Pacientes en seguimiento</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Evaluaciones Completadas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-green-600">156</div>
+              <p className="text-gray-600 text-sm">Este mes</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Terapias Recomendadas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-purple-600">8</div>
+              <p className="text-gray-600 text-sm">Modalidades disponibles</p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}`
+                                            }
+                                        }
+                                    },
+                                    "api": {
+                                        type: "folder",
+                                        children: {
+                                            "submit": {
+                                                type: "folder",
+                                                children: {
+                                                    "route.ts": {
+                                                        type: "file",
+                                                        content: `import { NextRequest, NextResponse } from 'next/server';
+import { generateRecommendations } from '@/lib/therapeuticAlgorithm';
+
+export async function POST(request: NextRequest) {
+  try {
+    const intake = await request.json();
+    
+    // Generar recomendaciones basadas en las respuestas
+    const recommendations = generateRecommendations(intake);
+    
+    // Aquí se guardarían los datos en la base de datos
+    // await saveIntakeData(intake, recommendations);
+    
+    return NextResponse.json({
+      success: true,
+      recommendations
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Error processing questionnaire' },
+      { status: 500 }
+    );
+  }
+}`
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            "components": {
+                                type: "folder",
+                                children: {
+                                    "ProgressIndicator.tsx": {
+                                        type: "file",
+                                        content: `interface ProgressIndicatorProps {
+  currentStep: number;
+  totalSteps: number;
+  stepTitle: string;
+}
+
+export default function ProgressIndicator({ 
+  currentStep, 
+  totalSteps, 
+  stepTitle 
+}: ProgressIndicatorProps) {
+  const progress = (currentStep / totalSteps) * 100;
+
+  return (
+    <div className="mb-8">
+      <div className="flex justify-between items-center mb-2">
+        <span className="text-sm font-medium text-gray-700">
+          Paso {currentStep + 1} de {totalSteps}
+        </span>
+        <span className="text-sm text-gray-500">
+          {Math.round(progress)}% completado
+        </span>
+      </div>
+      
+      <div className="w-full bg-gray-200 rounded-full h-2">
+        <div 
+          className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-300"
+          style={{ width: \`\${progress}%\` }}
+        />
+      </div>
+      
+      <h2 className="text-xl font-semibold text-gray-800 mt-4">
+        {stepTitle}
+      </h2>
+    </div>
+  );
+}`
+                                    },
+                                    "RecommendationPanel.tsx": {
+                                        type: "file",
+                                        content: `import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+interface Recommendation {
+  therapy: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  duration: string;
+}
+
+interface RecommendationPanelProps {
+  recommendations: Recommendation[];
+}
+
+export default function RecommendationPanel({ recommendations }: RecommendationPanelProps) {
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <h3 className="text-2xl font-bold text-gray-800 mb-6">
+        Recomendaciones Terapéuticas Personalizadas
+      </h3>
+      
+      {recommendations.map((rec, index) => (
+        <Card key={index} className="calm-card">
+          <CardHeader>
+            <div className="flex justify-between items-start">
+              <CardTitle className="text-lg">{rec.therapy}</CardTitle>
+              <Badge className={getPriorityColor(rec.priority)}>
+                {rec.priority === 'high' ? 'Alta' : rec.priority === 'medium' ? 'Media' : 'Baja'} prioridad
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <p className="text-gray-600 mb-2">{rec.description}</p>
+            <p className="text-sm text-gray-500">
+              <strong>Duración recomendada:</strong> {rec.duration}
+            </p>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}`
+                                    }
+                                }
+                            },
+                            "lib": {
+                                type: "folder",
+                                children: {
+                                    "therapeuticAlgorithm.ts": {
+                                        type: "file",
+                                        content: `// Algoritmo de recomendaciones terapéuticas holísticas
+export interface TherapeuticRecommendation {
+  therapy: string;
+  description: string;
+  priority: 'high' | 'medium' | 'low';
+  duration: string;
+  reason: string;
+}
+
+export function generateRecommendations(intake: any): TherapeuticRecommendation[] {
+  const recommendations: TherapeuticRecommendation[] = [];
+  
+  // Análisis emocional
+  if (intake.animo <= 4 || intake.estres >= 7) {
+    recommendations.push({
+      therapy: 'Aromaterapia con Lavanda',
+      description: 'Aceites esenciales de lavanda para reducir ansiedad y promover calma',
+      priority: 'high',
+      duration: '15-20 minutos, 2 veces al día',
+      reason: 'Niveles elevados de estrés detectados'
+    });
+    
+    recommendations.push({
+      therapy: 'Frecuencias Binaurales 432Hz',
+      description: 'Sonidos terapéuticos para equilibrar el sistema nervioso',
+      priority: 'high',
+      duration: '30 minutos antes de dormir',
+      reason: 'Desequilibrio emocional identificado'
+    });
+  }
+  
+  // Análisis físico
+  if (intake.energia <= 4 || intake.sueno <= 5) {
+    recommendations.push({
+      therapy: 'Terapia LED Roja',
+      description: 'Fototerapia para aumentar energía celular y vitalidad',
+      priority: 'medium',
+      duration: '20 minutos, 3 veces por semana',
+      reason: 'Baja energía vital detectada'
+    });
+  }
+  
+  // Análisis espiritual
+  if (intake.conexion <= 5 || intake.paz_interior <= 5) {
+    recommendations.push({
+      therapy: 'Meditación con Cuencos Tibetanos',
+      description: 'Práctica de meditación con sonidos ancestrales para conexión interior',
+      priority: 'medium',
+      duration: '20-30 minutos diarios',
+      reason: 'Desconexión espiritual identificada'
+    });
+  }
+  
+  // Recomendaciones generales
+  recommendations.push({
+    therapy: 'Infusión de Manzanilla y Pasiflora',
+    description: 'Té herbal para relajación y mejor calidad del sueño',
+    priority: 'low',
+    duration: '1 taza antes de dormir',
+    reason: 'Apoyo general para el bienestar'
+  });
+  
+  return recommendations;
+}
+
+// Modalidades terapéuticas disponibles
+export const THERAPEUTIC_MODALITIES = [
+  'Aromaterapia',
+  'Frecuencias Sonoras',
+  'Flores de Bach',
+  'Meditación Guiada',
+  'Terapia LED',
+  'Acupresión',
+  'Infusiones Naturales',
+  'Cuencos Tibetanos'
+];`
+                                    },
+                                    "utils.ts": {
+                                        type: "file",
+                                        content: `import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+// Utilidades para el manejo de datos del cuestionario
+export function calculateWellnessScore(responses: any) {
+  const emotional = (responses.animo + (10 - responses.estres)) / 2;
+  const physical = (responses.energia + responses.sueno) / 2;
+  const spiritual = (responses.conexion + responses.paz_interior) / 2;
+  
+  return {
+    emotional: Math.round(emotional * 10) / 10,
+    physical: Math.round(physical * 10) / 10,
+    spiritual: Math.round(spiritual * 10) / 10,
+    overall: Math.round(((emotional + physical + spiritual) / 3) * 10) / 10
+  };
+}
+
+export function formatDate(date: Date): string {
+  return new Intl.DateTimeFormat('es-ES', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+}`
+                                    }
+                                }
+                            },
+                            "types": {
+                                type: "folder",
+                                children: {
+                                    "diagnosis.ts": {
+                                        type: "file",
+                                        content: `// Tipos TypeScript para el sistema de diagnóstico holístico
+
+export interface Paciente {
+  nombre: string;
+  telefono: string;
+  fecha_nacimiento: string;
+}
+
+export interface Intake {
+  paciente: Paciente;
+  
+  // Bienestar emocional
+  animo: number; // 1-10
+  estres: number; // 1-10
+  tristeza_freq: string;
