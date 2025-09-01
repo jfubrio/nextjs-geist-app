@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holística - Diagnóstico Holístico Personalizado</title>
+    <meta name="description" content="Una herramienta integral para evaluar el bienestar emocional, físico y espiritual, generando recomendaciones terapéuticas personalizadas inspiradas en la sabiduría ancestral.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --radius: 0.75rem;
+            --background: oklch(0.99 0.005 240);
+            --foreground: oklch(0.145 0 0);
+            --card: oklch(1 0 0);
+            --card-foreground: oklch(0.145 0 0);
+            --primary: oklch(0.53 0.166 264);
+            --primary-foreground: oklch(0.985 0 0);
+            --secondary: oklch(0.96 0.01 240);
+            --border: oklch(0.914 0.02 240);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            font-feature-settings: "rlig" 1, "calt" 1;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
+        }
+
+        /* Calm-inspired component styles */
+        .calm-bg {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f0f9ff 0%, #f3e8ff 50%, #f0fdf4 100%);
+        }
+
+        .calm-glass {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .calm-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .calm-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .calm-button-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .calm-button-primary:hover {
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.4);
+            transform: scale(1.05);
+        }
+
+        .calm-button-secondary {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            color: #1d4ed8;
+            border: 2px solid #bfdbfe;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .calm-button-secondary:hover {
+            background: #eff6ff;
+        }
+
+        .calm-nav-link {
+            color: #6b7280;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .calm-nav-link:hover {
+            color: #2563eb;
+        }
+
+        .calm-text-gradient {
+            background: linear-gradient(135deg, #2563eb 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Typography */
+        .calm-title {
+            font-weight: 300;
+            line-height: 1.2;
+        }
+
+        .calm-subtitle {
+            font-weight: 400;
+            line-height: 1.6;
+        }
+
+        .calm-heading {
+            font-weight: 600;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .calm-subheading {
+            font-weight: 500;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .calm-body {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .calm-caption {
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+
+        /* Animations */
+        .calm-fade-in {
+            animation: calmFadeIn 0.6s ease-out forwards;
+        }
+
+        .calm-slide-up {
+            animation: calmSlideUp 0.8s ease-out forwards;
+        }
+
+        .calm-scale-in {
+            animation: calmScaleIn 0.5s ease-out forwards;
+        }
+
+        .calm-float {
+            animation: calmFloat 6s ease-in-out infinite;
+        }
+
+        .calm-breathe {
+            animation: calmBreathe 4s ease-in-out infinite;
+        }
+
+        .calm-pulse {
+            animation: calmPulse 2s ease-in-out infinite;
+        }
+
+        /* Hover effects */
+        .calm-hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .calm-hover-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Container styles */
+        .container-calm {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Keyframe animations */
+        @keyframes calmFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes calmSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes calmScaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes calmFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes calmBreathe {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes calmPulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Selection styling */
+        ::selection {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Focus styles for accessibility */
+        :focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        /* Smooth transitions for all interactive elements */
+        button, input, select, textarea, a {
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Hidden class for navigation */
+        .hidden {
+            display: none;
+        }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu.active {
+                display: block;
+            }
+        }
+
+        /* Questionnaire specific styles */
+        .emoji-scale {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+            border-radius: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .emoji-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            min-width: 60px;
+        }
+
+        .emoji-option:hover {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-option.selected {
+            background: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            border: 2px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .emoji-option .emoji {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .emoji-option .number {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+
+        .selection-option {
+            padding: 1rem;
+            text-align: left;
+            border-radius: 1rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .selection-option:hover {
+            border-color: #3b82f6;
+            background: #f0f9ff;
+        }
+
+        .selection-option.selected {
+            background: linear-gradient(135deg, #eff6ff 0%, #f3e8ff 100%);
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="calm-bg">
+    <!-- Header -->
+    <header class="calm-glass sticky top-0 z-50 border-b border-white/10">
+        <div class="container-calm py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center calm-pulse">
+                        <span class="text-white font-bold text-xl">H</span>
+                    </div>
+                    <h1 class="calm-title text-3xl calm-text-gradient">
+                        Holística
+                    </h1>
+                </div>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#questionnaire" class="calm-nav-link" onclick="showQuestionnaire()">
+                        Cuestionario
+                    </a>
+                    <a href="#dashboard" class="calm-nav-link" onclick="showDashboard()">
+                        Dashboard
+                    </a>
+                </nav>
+                <!-- Mobile menu button -->
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="mobile-menu mt-4 space-y-4">
+                <a href="#questionnaire" class="block calm-nav-link" onclick="showQuestionnaire()">Cuestionario</a>
+                <a href="#dashboard" class="block calm-nav-link" onclick="showDashboard()">Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Home Page -->
+        <div id="home-page">
+            <!-- Hero Section -->
+            <section class="relative overflow-hidden py-20">
+                <div class="container-calm">
+                    <div class="text-center space-y-12 calm-fade-in">
+                        <div class="space-y-8">
+                            <div class="text-8xl mb-8 calm-breathe">🌸</div>
+                            <h2 class="calm-title text-6xl md:text-7xl text-gray-800 leading-tight">
+                                Diagnóstico Holístico
+                                <span class="block calm-text-gradient font-medium mt-2">
+                                    Personalizado
+                                </span>
+                            </h2>
+                            <p class="calm-subtitle text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                                Una herramienta integral para evaluar el bienestar emocional, físico y espiritual, 
+                                generando recomendaciones terapéuticas personalizadas inspiradas en la sabiduría ancestral.
+                            </p>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                            <button onclick="showQuestionnaire()" class="calm-button-primary text-xl px-12 py-6 rounded-full shadow-2xl">
+                                Comenzar Evaluación Gratuita
+                            </button>
+                            <button onclick="showDashboard()" class="calm-button-secondary text-xl px-12 py-6 rounded-full">
+                                Dashboard Terapeuta
+                            </button>
+                        </div>
+
+                        <!-- Trust indicators -->
+                        <div class="flex flex-wrap justify-center items-center gap-8 text-gray-500 calm-caption mt-12">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">⏱️</span>
+                                <span>5-10 minutos</span>
+                            </div>
+                            <div class="w-1 h-1 bg-gray-400 rounded-full"></div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🔒</span>
+                                <span>100% confidencial</span>
+                            </div>
+                            <div class="w-1 h-1 bg-gray-400 rounded-full"></div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl">🎯</span>
+                                <span>Recomendaciones personalizadas</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Decorative elements -->
+                <div class="absolute top-20 left-10 w-32 h-32 bg-blue-200/20 rounded-full blur-3xl calm-float"></div>
+                <div class="absolute top-40 right-20 w-40 h-40 bg-purple-200/20 rounded-full blur-3xl calm-float" style="animation-delay: 2s"></div>
+                <div class="absolute bottom-20 left-1/4 w-28 h-28 bg-indigo-200/20 rounded-full blur-3xl calm-float" style="animation-delay: 4s"></div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="py-20 calm-glass">
+                <div class="container-calm">
+                    <div class="text-center mb-20 calm-fade-in">
+                        <h3 class="calm-title text-4xl text-gray-800 mb-6">
+                            Evaluación Integral del Bienestar
+                        </h3>
+                        <p class="calm-body text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
+                            Nuestro sistema evalúa tres dimensiones fundamentales del ser humano para ofrecer 
+                            un diagnóstico completo y recomendaciones terapéuticas precisas basadas en medicina holística.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        <!-- Emocional -->
+                        <div class="calm-card calm-hover-lift calm-slide-up">
+                            <div class="text-center pb-6 p-6">
+                                <div class="w-20 h-20 bg-gradient-to-br from-red-100 to-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <span class="text-4xl">💝</span>
+                                </div>
+                                <h4 class="calm-heading text-2xl text-gray-800 mb-6">Bienestar Emocional</h4>
+                                <p class="calm-body text-gray-600 text-lg leading-relaxed mb-6">
+                                    Evaluamos el estado de ánimo, niveles de estrés, ansiedad y patrones emocionales 
+                                    para identificar desequilibrios y áreas de mejora.
+                                </p>
+                                <div class="space-y-3 calm-caption text-gray-500">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-red-400 rounded-full"></span>
+                                        <span>Estado de ánimo actual</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-pink-400 rounded-full"></span>
+                                        <span>Niveles de estrés y ansiedad</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-rose-400 rounded-full"></span>
+                                        <span>Patrones emocionales</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Físico -->
+                        <div class="calm-card calm-hover-lift calm-slide-up" style="animation-delay: 0.2s">
+                            <div class="text-center pb-6 p-6">
+                                <div class="w-20 h-20 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <span class="text-4xl">💪</span>
+                                </div>
+                                <h4 class="calm-heading text-2xl text-gray-800 mb-6">Bienestar Físico</h4>
+                                <p class="calm-body text-gray-600 text-lg leading-relaxed mb-6">
+                                    Analizamos la energía vital, calidad del sueño, dolores corporales y hábitos 
+                                    de ejercicio para un diagnóstico físico completo.
+                                </p>
+                                <div class="space-y-3 calm-caption text-gray-500">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+                                        <span>Niveles de energía vital</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-blue-400 rounded-full"></span>
+                                        <span>Calidad del sueño</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-teal-400 rounded-full"></span>
+                                        <span>Dolores y tensiones</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Espiritual -->
+                        <div class="calm-card calm-hover-lift calm-slide-up" style="animation-delay: 0.4s">
+                            <div class="text-center pb-6 p-6">
+                                <div class="w-20 h-20 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <span class="text-4xl">✨</span>
+                                </div>
+                                <h4 class="calm-heading text-2xl text-gray-800 mb-6">Bienestar Espiritual</h4>
+                                <p class="calm-body text-gray-600 text-lg leading-relaxed mb-6">
+                                    Exploramos la conexión interior, sentido de propósito, paz interior y prácticas 
+                                    espirituales para una evaluación holística completa.
+                                </p>
+                                <div class="space-y-3 calm-caption text-gray-500">
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-purple-400 rounded-full"></span>
+                                        <span>Conexión con el propósito</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-indigo-400 rounded-full"></span>
+                                        <span>Paz interior profunda</span>
+                                    </div>
+                                    <div class="flex items-center justify-center space-x-2">
+                                        <span class="w-2 h-2 bg-violet-400 rounded-full"></span>
+                                        <span>Prácticas espirituales</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Therapeutic Recommendations Section -->
+            <section class="py-20">
+                <div class="container-calm">
+                    <div class="text-center mb-20 calm-fade-in">
+                        <h3 class="calm-title text-4xl text-gray-800 mb-6">
+                            Recomendaciones Terapéuticas Personalizadas
+                        </h3>
+                        <p class="calm-body text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
+                            Basándose en las respuestas del cuestionario, nuestro sistema genera un plan 
+                            terapéutico personalizado con múltiples modalidades de sanación ancestral y moderna.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">🌸</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Aromaterapia</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Aceites esenciales</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">🎵</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Frecuencias Sonoras</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Solfeggio & Binaurales</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">🌺</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Flores de Bach</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Esencias florales</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-violet-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">🧘</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Meditación Guiada</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Mindfulness</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">💡</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Terapia LED</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Fototerapia</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-blue-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">👆</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-subheading font-medium text-gray-800">Acupresión</h4>
+                                    <p class="calm-caption text-gray-500 mt-1">Puntos energéticos</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="calm-card calm-hover-lift text-center group">
+                            <div class="p-6 space-y-4">
+                                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
+                                    <span class="text-2xl">🍵</span>
+                                </div>
+                                <div>
+                                    <h4 class="calm-sub
